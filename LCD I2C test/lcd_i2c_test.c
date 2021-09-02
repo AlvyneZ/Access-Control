@@ -1,5 +1,8 @@
 /*
+	Program: Testing the LCD I2C module with the ATmega32
 
+	Pins to be used:
+		Check the lcd_i2c.h header file
 */
 
 

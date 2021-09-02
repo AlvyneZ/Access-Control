@@ -1,5 +1,5 @@
 /*
-	Hader: Holds the functions required for the MAIN_TIMER
+	Header: Holds the functions required for the MAIN_TIMER
 
 		The chosen timer for the main_timer is timer1
 		It is a 16-bit timer
@@ -73,24 +73,7 @@ void init_main_timer(){
 }
 
 
-/*
-uint16_t main_timer_count() {
-	//In order to get a stable reading of TCNT1
-	uint16_t counts[5] = {0,1,2,3,4};
-	uint8_t read = 0;
-	while ((counts[0] != counts[1]) || (counts[1] != counts[2]) ||
-			(counts[2] != counts[3]) || (counts[3] != counts[4])){
-		counts[read] = TCNT1;
-		read ++;
-		if (read >= 5) read = 0;
-	}
-	return counts[0];
-}
-*/
-/*
-uint64_t main_timer_now() {
-	return main_timer_t + main_timer_count();
-}*/
+
 uint64_t main_timer_now() {
 	//Save global interrupts flag
 	uint8_t sreg = SREG;
@@ -109,6 +92,21 @@ uint64_t main_timer_now_isr() {
 	uint64_t to_return = TCNT1;
 	to_return += main_timer_t;
 	return to_return;
+}
+
+
+void main_timer_clear() {
+	//Shouldn't be called in the main loop
+
+	//Save global interrupts flag
+	uint8_t sreg = SREG;
+	//Disable global interrupts
+	cli();
+	//Clearing TCNT1 and main_timer_t
+	TCNT1 = 0;
+	main_timer_t = 0;
+	//Restore global interrupt flag
+	SREG = sreg;
 }
 
 
